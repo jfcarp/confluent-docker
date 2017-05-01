@@ -1,0 +1,21 @@
+
+# first get into the container, for some reason it wouldnt work outside... YET!!
+docker-compose exec broker-1 bash
+confluent-rebalancer execute --zookeeper zookeeper-1:22181,zookeeper-2:32181 --metrics-bootstrap-server localhost:9092 --throttle 100000 --force --verbose
+
+#this should start the auto-rebalance per the output shown
+
+#check status of rebalance
+docker run \
+  --net=host \
+  --rm \
+  confluentinc/cp-enterprise-kafka:3.2.0 \
+  bash -c "confluent-rebalancer status --zookeeper localhost:22181"
+
+# finish the rebalance
+docker run \
+  --net=host \
+  --rm \
+  confluentinc/cp-enterprise-kafka:3.2.0 \
+  bash -c "confluent-rebalancer finish --zookeeper localhost:22181"
+
