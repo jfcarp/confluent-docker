@@ -161,3 +161,17 @@ services:
       CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS: 1
       PORT: 9021
 
+  manager:
+    image: sheepkiller/kafka-manager:latest 
+    ports:
+      - 9000:9000
+    depends_on:
+      - zookeeper-1
+      - zookeeper-2
+      - broker-1
+      - broker-2
+      - broker-3
+    environment:
+      ZK_HOSTS: zookeeper-1:22181,zookeeper-2:32181
+      KM_ARGS: -Djava.net.preferIPv4Stack=true
+
